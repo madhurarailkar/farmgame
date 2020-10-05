@@ -13,6 +13,7 @@ class Play extends Game {
     {
         $this->start();
     }
+    //This is the main function where game start
     public function playgame()
     {
         $status = $this->checkAliveStatus();
@@ -67,6 +68,7 @@ class Play extends Game {
 
         }
     }
+    //This is the main function is check the total turn
     public function checkAliveStatus(){
         $count = 0;
         $farmer_data =  $this->getFarmDetails('Farmer');
@@ -77,6 +79,7 @@ class Play extends Game {
             return false;
         }
     }
+    //This is the main function is for randomly select type
     public function game() 
     {
         $getFarmerCount=$this->getFarmDetails(SELF::FARMER_TYPE);
@@ -101,6 +104,7 @@ class Play extends Game {
             return $functions[0];
         }
     }
+    //This is the main function is for calculating the feed related count
     public function finalCount($type,$count)
     {
         if($type==SELF::FARMER_TYPE)
