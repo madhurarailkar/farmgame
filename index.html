@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="js/jquery-3.5.1.min.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+     </head>
+    <body>
+        <h1 align="center"> Farm Game</h1>
+        <h2 id="turnno" align="center" style="display:none;">Total Turn :<label class="blink_me" id="turnnumber"></label></h2>
+
+        <h2 id="turnnm" align="center" style="display:none;">Feed :<label class="blink_me" id="turnname"></label></h2>
+
+        <h2 id="gameover" align="center"  style="display:none;">Game Over :<label id="success"></label></h2>
+
+        <table class="center" border="1">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th><img src="images/farmer1.jpeg" width="60%" height="60%"></th>
+                    <th><img src="images/cows.jpeg"  width="60%" height="60%"></th>
+                    <th><img src="images/bunnies.jpeg"  width="60%" height="60%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Total Feed</th>
+                    <th id="farmer">1</th>
+                    <th id="cows">1</th>
+                    <th id="bunnies">1</th>  
+                </tr>
+                <tr id="totalcount">
+                    <th>Remaining</th>
+                    <th id="farmercount">1</th>
+                    <th id="cowscount">2</th>
+                    <th id="bunniescount">4</th>
+                </tr>
+            </tbody>
+        </table>
+        <div align="center">
+            <button  align="center" name="button" id="start"  class="button" style="background-color:#00b300;" >Start</button>
+
+        </div>
+        <div align="center">
+            <button  align="center" name="button" id="feed"  class="button"  style="background-color:#8585e0; display:none;" >Feed</button>
+
+        </div>
+    </body>
+</html>
+<script>
+$(document).ready(function(){
+    $("#start").click(function(){
+        $("#start").css("display","none");
+                    $("#feed").css("display","block");
+                    document.getElementById("farmer").innerHTML =0;
+                    document.getElementById("cows").innerHTML = 0;
+                    document.getElementById("bunnies").innerHTML = 0;
+                    document.getElementById("farmercount").innerHTML = 0;
+                    document.getElementById("cowscount").innerHTML = 0;
+                    document.getElementById("bunniescount").innerHTML =0;
+                    $("#turnnm").css("display","none");
+                    $("#gameover").css("display","none");
+                    $("#turnnm").css("display","none");
+
+    })
+    $("#feed").click(function(){
+        $.ajax({
+            type: "POST",
+            url: "index.php",   
+            success: function(response){  
+                try{
+                    var obj = JSON.parse(response);
+
+                    if(obj.count<=50)
+                    {
+                        $("#turnno").css("display","block");
+                        $("#turnnm").css("display","block");
+                        $("#gameover").css("display","none");
+
+                        document.getElementById("turnnumber").innerHTML = obj.count;
+                        document.getElementById("turnname").innerHTML = obj.type;
+                        document.getElementById("farmer").innerHTML = obj.feed_farmer;
+                        document.getElementById("cows").innerHTML = obj.feed_cows;
+                        document.getElementById("bunnies").innerHTML = obj.feed_bunnies;
+                        document.getElementById("farmercount").innerHTML = obj.remain_farmer;
+                        document.getElementById("cowscount").innerHTML = obj.remain_cows;
+                        document.getElementById("bunniescount").innerHTML = obj.remain_bunnies;
+
+                    }
+                    else
+                    {
+                        $("#turnnm").css("display","none");
+                        $("#gameover").css("display","block");
+                        $("#turnnumber").removeClass('blink_me');
+
+                        document.getElementById("success").innerHTML = obj[3];
+                        document.getElementById("farmercount").innerHTML = obj[0];
+                        document.getElementById("cowscount").innerHTML = obj[1];
+                        document.getElementById("bunniescount").innerHTML = obj[2];
+                        $("#start").css("display","block");
+                        $("#feed").css("display","none");
+                    }
+                }
+                catch{
+                    alert('Please add read write permission to files folder');
+                }
+
+            },//function success
+            error: function (){ alert('something wrong with ajax!') }
+        });//$.ajax
+    });
+    });
+</script>
